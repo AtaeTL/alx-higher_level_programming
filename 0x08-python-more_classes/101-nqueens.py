@@ -1,52 +1,48 @@
 #!/usr/bin/python3
-'''Module for N Queens problem.'''
+import sys
 
-
-def isSafe(board, row, col):
-    '''Checks if position is safe from attack.
-
-    Args:
-        board: The board state.
-        row: The row to check.
-        col: The colum to check.
-    '''
-    for c in range(col):
-        if board[c] is row or abs(board[c] - row) is abs(c - col):
+def is_safe(board, row, col, N):
+    # Check for queens in the same column
+    for i in range(row):
+        if board[i][col] == 1:
+            return False
+    # Check for queens in the upper left diagonal
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    # Check for queens in the upper right diagonal
+    for i, j in zip(range(row, -1, -1), range(col, N)):
+        if board[i][j] == 1:
             return False
     return True
 
-
-def checkBoard(board, col):
-    '''Checks the board state column by column using backtracking.
-
-    Args:
-        board: The board state.
-        col: The current colum to check.
-    '''
-    n = len(board)
-    if col is n:
-        print(str([[c, board[c]] for c in range(n)]))
+def solve_nqueens(board, row, N):
+    if row == N:
+        # We have a solution
+        solution = []
+        for i in range(N):
+            for j in range(N):
+                if board[i][j] == 1:
+                    solution.append([i, j])
+        print(solution)
         return
-
-    for row in range(n):
-        if isSafe(board, row, col):
-            board[col] = row
-            checkBoard(board, col + 1)
+    for col in range(N):
+        if is_safe(board, row, col, N):
+            board[row][col] = 1
+            solve_nqueens(board, row + 1, N)
+            board[row][col] = 0
 
 if __name__ == "__main__":
-    import sys
-
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
-    n = 0
     try:
-        n = int(sys.argv[1])
-    except:
+        N = int(sys.argv[1])
+    except ValueError:
         print("N must be a number")
         sys.exit(1)
-    if n < 4:
+    if N < 4:
         print("N must be at least 4")
         sys.exit(1)
-    board = [0 for col in range(n)]
-    checkBoard(board, 0)
+    board = [[0] * N for i in range(N)]
+    solve_nqueens(board, 0, N)
