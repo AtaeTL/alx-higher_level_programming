@@ -1,10 +1,8 @@
 #!/usr/bin/node
-let s;
-if (process.argv.length < 3) {
-  s = 'No argument';
+if (process.argv.length === 2) {
+  console.log('No argument');
 } else if (process.argv.length === 3) {
-  s = 'Argument found';
+  console.log('Argument found');
 } else {
-  s = 'Arguments found';
+  console.log('Arguments found');
 }
-console.log(s);
